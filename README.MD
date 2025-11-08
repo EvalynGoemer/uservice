@@ -6,11 +6,7 @@ This is useful if you use many distros and swapping between syntax of init syste
 
 ## Supported Systems
 - systemd
-    - Arch Linux
-    - CachyOS
-    - Raspberry Pi OS
 - openRC
-    - Alpine Linux
 
 ## Supported Operations
 - `uservice start <service>`
