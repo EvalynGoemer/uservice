@@ -94,10 +94,10 @@ void check_init_system() {
     }
 
     #ifdef DEBUG
-        printf("Best Found Init System: %s\n", init_system_name[init_system]);
+        printf("Best Found Init System: %s\n", init_system_name_dbg[init_system]);
         printf("Init System Confidence Levels\n");
         for (int i = 0; i < NUMBER_OF_SUPPORTED_INIT_SYSTEMS; i++) {
-            printf("%s: %d\n",init_system_name[i], init_system_confidence_levels[i]);
+            printf("%s: %d\n",init_system_name_dbg[i], init_system_confidence_levels[i]);
         }
     #endif
 }
@@ -112,7 +112,7 @@ void fork_and_execute_2arg(char command[], char arg1[], char arg2[]) {
     if(pid == 0) {
         int status = execlp(command, command, arg1, arg2, NULL);
         if (status == -1) {
-            printf("FATAL: CALLING \"%s %s %s\" FAILED\n", command, arg1, arg2, NULL);
+            printf("FATAL: CALLING \"%s %s %s\" FAILED\n", command, arg1, arg2);
             exit(-1);
         }
     } else {
@@ -132,7 +132,7 @@ void fork_and_execute_3arg(char command[], char arg1[], char arg2[], char arg3[]
     if(pid == 0) {
         int status = execlp(command, command, arg1, arg2, arg3, NULL);
         if (status == -1) {
-            printf("FATAL: CALLING \"%s %s %s %s\" FAILED\n", command, arg1, arg2, arg3, NULL);
+            printf("FATAL: CALLING \"%s %s %s %s\" FAILED\n", command, arg1, arg2, arg3);
             exit(-1);
         }
     } else {
@@ -155,7 +155,24 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
-    check_init_system();
+    // check for config file and if it dosnt exist attempt auto detection
+    // thanks @ymity (discord) for helping
+    FILE *fptr;
+    if ((fptr = fopen("/etc/uservice.conf", "r"))) {
+
+        char fbuf[16] = {0};
+        fgets(fbuf, 16, fptr);
+
+        for (int i = 0; i < NUMBER_OF_SUPPORTED_INIT_SYSTEMS; i++) {
+            if (strcmp(fbuf, init_system_name[i]) == 0) {
+                init_system = i;
+                break;
+            }
+        }
+        fclose(fptr);
+    } else{
+        check_init_system();
+    }
 
     // sanity check
     if (init_system == UNSUPPORTED_INIT_SYSTEM) {

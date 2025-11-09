@@ -5,4 +5,8 @@ enum init_system {
     UNSUPPORTED_INIT_SYSTEM,
 };
 
-static const char* init_system_name[] = {"systemd", "openRC", "INVALID", "INVALID"};
+#ifdef DEBUG
+    static char init_system_name_dbg[][16] = {"systemd", "openRC", "INVALID", "INVALID"};
+#endif
+
+static char init_system_name[][16] = {"systemd\n", "openRC\n", "INVALID\n", "INVALID\n"};

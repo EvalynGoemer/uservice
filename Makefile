@@ -1,4 +1,4 @@
 all:
-	gcc -O2 -static -o uservice uservice.c
+	gcc -O2 -Wall -Wextra -Wpedantic -static -o uservice uservice.c
 debug:
-	gcc -O0 -static -DDEBUG -o uservice uservice.c
+	gcc -O0 -Wall -Wextra -Wpedantic -static -DDEBUG -o uservice uservice.c
